@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 60%, #fce4ec 100%);
+      padding: 70px 80px 60px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero-content { z-index: 1; animation: fadeInUp 0.7s ease both; max-width: 600px; }
+    .page-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; color: var(--dark); margin-bottom: 14px;
+    }
+    .page-hero-content p { color: var(--muted); font-size: 1rem; }
+    .paw-decor {
+      font-size: 8rem; opacity: 0.08;
+      position: absolute; right: 80px; bottom: -10px; user-select: none;
+    }
+
+    /* CONTACT BODY */
+    .contact-body {
+      padding: 70px 80px;
+      background: var(--white);
+      display: flex; gap: 60px; align-items: flex-start;
+    }
+
+    /* INFO COLUMN */
+    .contact-info { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px; }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .contact-info > p { color: var(--muted); font-size: 0.93rem; line-height: 1.65; margin-bottom: 8px; }
+    .info-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--card-bg);
+      border-radius: 14px; padding: 16px 18px;
+    }
+    .info-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--pink-light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .info-text strong { display: block; font-size: 0.85rem; color: var(--text); margin-bottom: 3px; }
+    .info-text span { font-size: 0.88rem; color: var(--muted); }
+
+    /* SOCIAL */
+    .social-row { display: flex; gap: 10px; margin-top: 4px; }
+    .social-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      border: 1.5px solid #e0e0e0;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: transparent;
+      text-decoration: none;
+    }
+    .social-btn:hover { border-color: var(--pink); background: var(--pink-light); }
+
+    /* FORM COLUMN */
+    .contact-form-col { flex: 1; }
+    .contact-form-col h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .contact-form-col > p { color: var(--muted); font-size: 0.93rem; margin-bottom: 32px; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem; color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--bg);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--pink); background: #fff; }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .success-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #4caf50;
+      border-radius: 12px;
+      padding: 16px 20px;
+      color: #2e7d32;
+      font-weight: 700;
+      font-size: 0.93rem;
+      animation: fadeInUp 0.4s ease;
+      margin-bottom: 10px;
+    }
+
+    .form-submit .btn { font-size: 1rem; padding: 13px 36px; }
+
+    /* MAP PLACEHOLDER */
+    .map-section {
+      background: var(--card-bg);
+      padding: 0;
+      border-top: 1px solid #f0e0e5;
+    }
+    .map-embed {
+      width: 100%; height: 320px;
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px;
+      font-size: 3rem; color: var(--pink);
+    }
+    .map-embed p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem; color: var(--muted); margin: 0;
+    }
+
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 1024px) {
+      .contact-body { flex-direction: column; padding: 50px 40px; }
+      .contact-info { width: 100%; }
+    }
+    @media (max-width: 768px) {
+      .page-hero { padding: 50px 24px; }
+      .page-hero-content h1 { font-size: 2.2rem; }
+      .contact-body { padding: 40px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .paw-decor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html">Available Pets</a></li>
+      <li><a href="post-a-pet.html">Post a Pet</a></li>
+      <li><a href="pet-care.html">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <h1>Get in <span class="brand-name">Touch</span></h1>
+      <p>Have a question, want to volunteer, or need help with an adoption? We'd love to hear from you!</p>
+    </div>
+    <div class="paw-decor">🐾</div>
+  </section>
+
+  <!-- CONTACT BODY -->
+  <section class="contact-body">
+
+    <!-- INFO -->
+    <div class="contact-info">
+      <div>
+        <h2>Contact <span class="brand-name">Info</span></h2>
+        <p>We're available Monday to Saturday, 10am – 6pm. Reach out and our team will respond within 24 hours.</p>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><img src="Images/location.svg" alt="icon"></div>
+        <div class="info-text">
+          <strong>Visit Us</strong>
+          <span>Block 5, Clifton, Karachi, Pakistan</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><img src="Images/call.svg" alt="icon"></div>
+        <div class="info-text">
+          <strong>Call Us</strong>
+          <span>+92 300 1234567</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><img src="Images/email.svg" alt="icon"></div>
+        <div class="info-text">
+          <strong>Email Us</strong>
+          <span>hello@lovepaws.pk</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><img src="Images/clock.svg" alt="icon"></div>
+        <div class="info-text">
+          <strong>Working Hours</strong>
+          <span>Mon – Sat, 10:00 AM – 6:00 PM</span>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-size:0.85rem; font-weight:700; color:var(--text); margin-bottom:12px;">Follow Us</p>
+        <div class="social-row">
+          <a class="social-btn" href="#" title="Facebook"><img src="Images/facebook.svg" alt="icon"></a>
+          <a class="social-btn" href="#" title="Instagram"><img src="Images/twitter.svg" alt="icon"></a>
+          <a class="social-btn" href="#" title="Twitter/X"><img src="Images/instagram.svg" alt="icon"></a>
+          <a class="social-btn" href="#" title="WhatsApp"><img src="Images/email.svg" alt="icon"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="contact-form-col">
+      <h2>Send Us a <span class="brand-name">Message</span></h2>
+      <p>Fill in the form below and we'll get back to you as soon as possible.</p>
+
+      <div class="success-msg" id="successMsg">
+        ✅ Thank you! Your message has been sent. We'll reply within 24 hours.
+      </div>
+
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" placeholder="yourname@email.com" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="03XX-XXXXXXX" />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <select id="subject" required>
+              <option value="" disabled selected>Select a topic</option>
+              <option>Adoption Inquiry</option>
+              <option>Volunteer / Join Us</option>
+              <option>Donate</option>
+              <option>Report a Stray</option>
+              <option>Partnership Inquiry</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message *</label>
+          <textarea id="message" placeholder="Tell us how we can help you..." required></textarea>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-pink">Send Message</button>
+        </div>
+      </form>
+    </div>
+
+  </section>
+
+  <!-- MAP -->
+  <div class="map-section">
+    <div class="map-embed">
+      <span><img src="Images/address.svg" alt="icon"></span>
+      <p>LovePaws Shelter — Block 5, Clifton, Karachi</p>
+      <a href="https://maps.google.com" target="_blank" class="btn btn-pink" style="font-size:0.85rem; margin-top:8px;">Open in Google Maps</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      e.target.reset();
+      window.scrollTo({ top: msg.offsetTop - 120, behavior: 'smooth' });
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

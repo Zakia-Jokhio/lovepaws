@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 50%, #fce4ec 100%);
+      min-height: 100vh;
+    }
+
+    /* AUTH WRAPPER */
+    .auth-page {
+      min-height: calc(100vh - 100px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 60px 24px;
+    }
+    .auth-container {
+      display: flex;
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(232,71,106,0.15);
+      max-width: 960px;
+      width: 100%;
+      animation: fadeInUp 0.6s ease both;
+    }
+
+    /* LEFT PANEL */
+    .auth-panel {
+      background: var(--pink);
+      width: 320px; flex-shrink: 0;
+      padding: 56px 36px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      position: relative; overflow: hidden;
+    }
+    .auth-panel::before {
+      content: '🐾';
+      position: absolute; font-size: 9rem; opacity: 0.1;
+      bottom: -20px; right: -20px; pointer-events: none;
+    }
+    .auth-panel .panel-logo {
+      font-family: 'Playfair Display', serif;
+      color: #fff; font-size: 1.7rem; margin-bottom: 20px;
+    }
+    .auth-panel p { color: rgba(255,255,255,0.85); font-size: 0.9rem; line-height: 1.7; margin-bottom: 28px; }
+    .perks { display: flex; flex-direction: column; gap: 12px; }
+    .perk-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      color: rgba(255,255,255,0.9); font-size: 0.87rem;
+    }
+    .perk-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+    }
+    .panel-switch {
+      margin-top: 32px;
+      color: rgba(255,255,255,0.8); font-size: 0.88rem;
+    }
+    .panel-switch a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+    /* FORM PANEL */
+    .auth-form-panel {
+      flex: 1; padding: 48px 48px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .auth-form-panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .auth-form-panel > p { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+
+    .auth-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 0.83rem; font-weight: 700; color: var(--text); }
+    .form-group input, .form-group select {
+      padding: 11px 15px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem; color: var(--text);
+      outline: none; transition: border-color 0.2s; background: var(--bg);
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--pink); background: #fff; }
+
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 44px; width: 100%; }
+    .toggle-pw {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 1rem; background: none; border: none; padding: 0; color: var(--muted);
+    }
+
+    /* PASSWORD STRENGTH */
+    .pw-strength { display: flex; gap: 4px; margin-top: 6px; }
+    .pw-bar {
+      height: 4px; flex: 1; border-radius: 4px;
+      background: #e0e0e0; transition: background 0.3s;
+    }
+    .pw-bar.weak { background: #ef5350; }
+    .pw-bar.medium { background: #ff9800; }
+    .pw-bar.strong { background: #4caf50; }
+    .pw-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+    /* TERMS */
+    .terms-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 0.84rem; color: var(--muted);
+    }
+    .terms-row input[type="checkbox"] { accent-color: var(--pink); margin-top: 2px; flex-shrink: 0; }
+    .terms-row a { color: var(--pink); font-weight: 700; }
+
+    .auth-submit .btn { width: 100%; font-size: 0.97rem; padding: 13px; margin-top: 4px; }
+
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--muted); font-size: 0.82rem;
+    }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+    .social-logins { display: flex; gap: 12px; }
+    .social-login-btn {
+      flex: 1; padding: 10px;
+      border: 1.5px solid #e0e0e0; border-radius: 12px;
+      background: #fff; cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: all 0.2s; color: var(--text);
+    }
+    .social-login-btn img{
+    max-width: 45px;
+    max-height: 45px;
+    }
+    .social-login-btn:hover { border-color: var(--pink); background: var(--pink-light); }
+
+    .switch-link { text-align: center; font-size: 0.88rem; color: var(--muted); }
+    .switch-link a { color: var(--pink); font-weight: 700; }
+
+    .success-msg {
+      display: none;
+      background: #e8f5e9; border: 1.5px solid #4caf50;
+      border-radius: 10px; padding: 12px 16px;
+      color: #2e7d32; font-weight: 700; font-size: 0.88rem;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 768px) {
+      .auth-container { flex-direction: column; }
+      .auth-panel { width: 100%; padding: 36px 28px; }
+      .auth-form-panel { padding: 36px 28px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html">Available Pets</a></li>
+      <li><a href="post-a-pet.html">Post a Pet</a></li>
+      <li><a href="pet-care.html">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- AUTH PAGE -->
+  <div class="auth-page">
+    <div class="auth-container">
+
+      <!-- LEFT PANEL -->
+      <div class="auth-panel">
+        <div class="panel-logo"><img src="Images/blacklogo.svg" alt="icon">LovePaws</div>
+        <p>Join thousands of animal lovers who have found their perfect furry companion through LovePaws.</p>
+        <div class="perks">
+          <div class="perk-item">
+            <div class="perk-icon"><img src="Images/save.svg" alt="icon"></div>
+
+            <span>Save your favourite pets</span>
+          </div>
+          <div class="perk-item">
+            <div class="perk-icon"><img src="Images/note.svg" alt="icon"></div>
+            <span>Track adoption applications</span>
+          </div>
+          <div class="perk-item">
+            <div class="perk-icon"><img src="Images/noti.svg" alt="icon"></div>
+            <span>Get notified on new pets</span>
+          </div>
+          <div class="perk-item">
+            <div class="perk-icon"><img src="Images/pet.svg" alt="icon"></div>
+            <span>Post pets for adoption</span>
+          </div>
+        </div>
+        <div class="panel-switch">
+          Already have an account?
+          <a href="login.html">Sign in →</a>
+        </div>
+      </div>
+
+      <!-- FORM PANEL -->
+      <div class="auth-form-panel">
+        <h2>Create Your <span class="brand-name">Account</span></h2>
+        <p>Join LovePaws today — it's free and takes under a minute!</p>
+
+        <div class="success-msg" id="successMsg">
+          🎉 Account created! Welcome to LovePaws! Redirecting...
+        </div>
+
+        <form class="auth-form" onsubmit="handleRegister(event)">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name *</label>
+              <input type="text" id="firstName" placeholder="First name" required />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name *</label>
+              <input type="text" id="lastName" placeholder="Last name" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" placeholder="yourname@email.com" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="03XX-XXXXXXX" />
+            </div>
+            <div class="form-group">
+              <label for="city">City *</label>
+              <select id="city" required>
+                <option value="" disabled selected>Select city</option>
+                <option>Karachi</option>
+                <option>Lahore</option>
+                <option>Islamabad</option>
+                <option>Rawalpindi</option>
+                <option>Peshawar</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password *</label>
+            <div class="password-wrap">
+              <input type="password" id="password" placeholder="Create a strong password" required oninput="checkStrength(this.value)" />
+              <button type="button" class="toggle-pw" onclick="togglePassword('password', this)">  <i class="fa fa-eye"></i></button>
+            </div>
+            <div class="pw-strength">
+              <div class="pw-bar" id="bar1"></div>
+              <div class="pw-bar" id="bar2"></div>
+              <div class="pw-bar" id="bar3"></div>
+            </div>
+            <span class="pw-label" id="pwLabel">Enter a password</span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password *</label>
+            <div class="password-wrap">
+              <input type="password" id="confirmPassword" placeholder="Re-enter your password" required />
+              <button type="button" class="toggle-pw" onclick="togglePassword('confirmPassword', this)"><i class="fa fa-eye"></i></button>
+            </div>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="terms" required />
+            <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> of LovePaws.</label>
+          </div>
+
+          <div class="auth-submit">
+            <button type="submit" class="btn btn-pink">Create My Account</button>
+          </div>
+
+          <div class="or-divider">or register with</div>
+
+          <div class="social-logins">
+            <button type="button" class="social-login-btn"><img src="Images/google.svg" alt="LovePaws Logo" class="social-login-btn />"</button>
+            <button type="button" class="social-login-btn"><img src="Images/rfb.svg" alt="LovePaws Logo" class="social-login-btn />" </button>
+          </div>
+
+        </form>
+
+        <div class="switch-link" style="margin-top:14px;">
+          Already have an account? <a href="login.html">Sign in here</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script>
+    function handleRegister(e) {
+      e.preventDefault();
+      const pw = document.getElementById('password').value;
+      const cpw = document.getElementById('confirmPassword').value;
+      if (pw !== cpw) {
+        alert('Passwords do not match!'); return;
+      }
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+    }
+
+    function togglePassword(id, btn) {
+      if (inp.type === 'password') {
+      inp.type = 'text';
+      btn.innerHTML = '<i class="fa fa-eye-slash"></i>';
+    } else {
+      inp.type = 'password';
+      btn.innerHTML = '<i class="fa fa-eye"></i>';
+    }
+    }
+
+    function checkStrength(val) {
+      const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+      const label = document.getElementById('pwLabel');
+      bars.forEach(b => { b.className = 'pw-bar'; });
+      if (val.length === 0) { label.textContent = 'Enter a password'; return; }
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      if (score === 1) {
+        bars[0].classList.add('weak');
+        label.textContent = 'Weak'; label.style.color = '#ef5350';
+      } else if (score === 2) {
+        bars[0].classList.add('medium'); bars[1].classList.add('medium');
+        label.textContent = 'Medium'; label.style.color = '#ff9800';
+      } else if (score === 3) {
+        bars.forEach(b => b.classList.add('strong'));
+        label.textContent = 'Strong'; label.style.color = '#4caf50';
+      }
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

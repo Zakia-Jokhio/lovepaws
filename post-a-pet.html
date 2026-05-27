@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Post a Pet – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 60%, #fce4ec 100%);
+      padding: 70px 80px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero-content { z-index: 1; animation: fadeInUp 0.7s ease both; }
+    .page-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .page-hero-content p { color: var(--muted); font-size: 1rem; max-width: 480px; }
+    .paw-decor {
+      font-size: 8rem; opacity: 0.08;
+      position: absolute; right: 80px; bottom: -10px;
+      z-index: 0; user-select: none;
+    }
+
+    /* FORM SECTION */
+    .form-section {
+      padding: 70px 80px;
+      background: var(--white);
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .form-side {
+      flex: 1;
+      max-width: 640px;
+    }
+    .form-side h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .form-side > p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+
+    /* FORM STYLES */
+    .pet-form { display: flex; flex-direction: column; gap: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--bg);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--pink); background: #fff; }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    /* FILE UPLOAD */
+    .upload-area {
+      border: 2px dashed #e0c5cc;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+      background: var(--bg);
+    }
+    .upload-area:hover { border-color: var(--pink); background: var(--pink-light); }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .upload-area p { color: var(--muted); font-size: 0.88rem; }
+    .upload-area span { color: var(--pink); font-weight: 700; }
+    .upload-area input[type="file"] { display: none; }
+
+    /* CHECKBOX GROUP */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      background: var(--bg);
+      padding: 7px 14px;
+      border-radius: 50px;
+      border: 1.5px solid #e0e0e0;
+      transition: all 0.2s;
+    }
+    .checkbox-group input[type="checkbox"] { accent-color: var(--pink); }
+    .checkbox-group label:hover { border-color: var(--pink); }
+
+    /* SUBMIT */
+    .form-submit { margin-top: 8px; }
+    .form-submit .btn { font-size: 1rem; padding: 14px 40px; width: 100%; }
+
+    /* INFO PANEL */
+    .info-panel {
+      width: 300px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: 100px;
+    }
+    .info-card {
+      background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 100%);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .info-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .info-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .info-card ul li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .info-card ul li::before {
+      content: '✓';
+      color: var(--pink);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .info-steps { display: flex; flex-direction: column; gap: 14px; }
+    .step-item { display: flex; align-items: flex-start; gap: 12px; }
+    .step-num {
+      width: 30px; height: 30px;
+      background: var(--pink);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-text { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+    .step-text strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+    /* SUCCESS MESSAGE */
+    .success-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #4caf50;
+      border-radius: 12px;
+      padding: 18px 22px;
+      color: #2e7d32;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    /* nav active */
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 1024px) {
+      .form-section { flex-direction: column; padding: 50px 40px; }
+      .info-panel { width: 100%; position: static; flex-direction: row; flex-wrap: wrap; }
+      .info-card { flex: 1; min-width: 260px; }
+    }
+    @media (max-width: 768px) {
+      .page-hero { padding: 50px 24px; }
+      .page-hero-content h1 { font-size: 2.2rem; }
+      .form-section { padding: 40px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .paw-decor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html">Available Pets</a></li>
+      <li><a href="post-a-pet.html" class="active">Post a Pet</a></li>
+      <li><a href="pet-care.html">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <h1>Post a <span class="brand-name">Pet</span></h1>
+      <p>Help a furry friend find their forever home. Fill in the details below and we'll list your pet on LovePaws!</p>
+    </div>
+    <div class="paw-decor">🐾</div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <div class="form-side">
+      <h2>Pet Listing Details</h2>
+      <p>Please fill in accurate information to help potential adopters find the perfect match.</p>
+
+      <div class="success-msg" id="successMsg">
+        Your pet has been listed successfully! We'll review and publish it within 24 hours.
+      </div>
+
+      <form class="pet-form" onsubmit="handleSubmit(event)">
+
+        <!-- Pet Info -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="petName">Pet Name *</label>
+            <input type="text" id="petName" placeholder="e.g. Max, Luna..." required />
+          </div>
+          <div class="form-group">
+            <label for="petType">Pet Type *</label>
+            <select id="petType" required>
+              <option value="" disabled selected>Select type</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="breed">Breed</label>
+            <input type="text" id="breed" placeholder="e.g. Golden Retriever, Persian..." />
+          </div>
+          <div class="form-group">
+            <label for="age">Age *</label>
+            <input type="text" id="age" placeholder="e.g. 2 years, 6 months..." required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gender">Gender *</label>
+            <select id="gender" required>
+              <option value="" disabled selected>Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input type="text" id="city" placeholder="e.g. Karachi, Lahore..." required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Health Status</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" /> Vaccinated</label>
+            <label><input type="checkbox" /> Neutered / Spayed</label>
+            <label><input type="checkbox" /> Dewormed</label>
+            <label><input type="checkbox" /> Microchipped</label>
+            <label><input type="checkbox" /> Vet Checked</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Temperament</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" /> Good with Kids</label>
+            <label><input type="checkbox" /> Good with Dogs</label>
+            <label><input type="checkbox" /> Good with Cats</label>
+            <label><input type="checkbox" /> House Trained</label>
+            <label><input type="checkbox" /> Calm</label>
+            <label><input type="checkbox" /> Playful</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">About this Pet *</label>
+          <textarea id="description" placeholder="Tell us about their personality, habits, favourite activities and why they need a new home..." required></textarea>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="form-group">
+          <label>Pet Photos</label>
+          <div class="upload-area" onclick="document.getElementById('photoInput').click()">
+            <div class="upload-icon">📷</div>
+            <p><span>Click to upload</span> or drag & drop photos here</p>
+            <p style="font-size:0.78rem; margin-top:4px;">JPG, PNG up to 5MB each · Max 5 photos</p>
+            <input type="file" id="photoInput" accept="image/*" multiple />
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <h3 style="font-family:'Playfair Display',serif; color:var(--dark); font-size:1.2rem; margin-top:10px;">Your Contact Details</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ownerName">Your Name *</label>
+            <input type="text" id="ownerName" placeholder="Full name" required />
+          </div>
+          <div class="form-group">
+            <label for="ownerPhone">Phone Number *</label>
+            <input type="tel" id="ownerPhone" placeholder="e.g. 03XX-XXXXXXX" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ownerEmail">Email Address *</label>
+          <input type="email" id="ownerEmail" placeholder="yourname@email.com" required />
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-pink">Submit Pet Listing</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- INFO PANEL -->
+    <aside class="info-panel">
+      <div class="info-card">
+        <h3>How It Works</h3>
+        <div class="info-steps">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Fill the Form</strong>Add your pet's details, photos, and your contact info.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>We Review</strong>Our team reviews listings within 24 hours for quality.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Get Listed</strong>Approved pets appear on our Available Pets page.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Get Connected</strong>Interested adopters contact you directly!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>Our Listing Guidelines</h3>
+        <ul>
+          <li>Provide accurate health and age information</li>
+          <li>Upload clear, recent photos of the pet</li>
+          <li>Be honest about temperament and needs</li>
+          <li>Only post pets in your care</li>
+          <li>Respond promptly to interested adopters</li>
+          <li>No commercial breeding listings allowed</li>
+        </ul>
+      </div>
+
+      <div class="info-card" style="background: var(--pink); color:#fff;">
+        <h3 style="color:#fff;">Need Help?</h3>
+        <p style="font-size:0.88rem; color:rgba(255,255,255,0.85); line-height:1.6;">
+          Our team is always here to assist you with listing your pet. Feel free to reach out!
+        </p>
+        <a href="contact.html" class="btn" style="background:#fff; color:var(--pink); margin-top:16px; display:inline-block;">Contact Us</a>
+      </div>
+    </aside>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      e.target.reset();
+      window.scrollTo({ top: msg.offsetTop - 120, behavior: 'smooth' });
+    }
+
+    // Drag & drop highlight
+    const uploadArea = document.querySelector('.upload-area');
+    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = 'var(--pink)'; });
+    uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = ''; });
+    uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.style.borderColor = ''; });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

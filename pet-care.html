@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pet Care – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 60%, #fce4ec 100%);
+      padding: 70px 80px 60px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero-content { z-index: 1; animation: fadeInUp 0.7s ease both; max-width: 600px; }
+    .page-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; color: var(--dark); margin-bottom: 14px;
+    }
+    .page-hero-content p { color: var(--muted); font-size: 1rem; }
+    .paw-decor {
+      font-size: 8rem; opacity: 0.08;
+      position: absolute; right: 80px; bottom: -10px; user-select: none;
+    }
+
+    /* QUICK TIPS STRIP */
+    .tips-strip {
+      background: var(--pink);
+      padding: 20px 80px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .tips-strip img {
+      width: 40px; height: 40px; object-fit: contain; display: block;
+    } 
+
+    .tip-pill {
+      display: flex; align-items: center; gap: 8px;
+      color: #fff; font-size: 0.88rem; font-weight: 700;
+    }
+    .tip-pill span { font-size: 1.3rem; }
+
+    /* CATEGORIES */
+    .care-section { padding: 70px 80px; background: var(--white); }
+    .care-section > h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; color: var(--dark); text-align: center; margin-bottom: 8px;
+    }
+    .care-section > .section-subtitle { text-align: center; margin-bottom: 56px; }
+
+    .care-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 70px;
+    }
+    .care-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(232,71,106,0.07);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .care-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 36px rgba(232,71,106,0.16);
+    }
+    .care-card-header {
+      padding: 28px 28px 18px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .care-icon {
+      width: 56px; height: 56px;
+      background: var(--pink-light);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; flex-shrink: 0;
+    }
+    .care-card-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--dark);
+    }
+    .care-card-header p { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+    .care-card-body { padding: 0 28px 24px; }
+    .care-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .care-list li {
+      font-size: 0.9rem; color: var(--text);
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px;
+      background: #fff; border-radius: 10px;
+      border-left: 3px solid var(--pink-light);
+      transition: border-color 0.2s;
+    }
+    .care-list li:hover { border-color: var(--pink); }
+    .care-list li::before { content: '🐾'; font-size: 0.9rem; flex-shrink: 0; }
+
+    /* DIVIDER */
+    .care-divider {
+      text-align: center; margin-bottom: 56px;
+    }
+    .care-divider h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--dark); margin-bottom: 6px;
+    }
+
+    /* FAQ */
+    .faq-section {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 100%);
+      padding: 70px 80px;
+    }
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; color: var(--dark); text-align: center; margin-bottom: 48px;
+    }
+    .faq-grid { display: flex; flex-direction: column; gap: 14px; max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 3px 14px rgba(232,71,106,0.07);
+    }
+    .faq-question {
+      padding: 18px 24px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      font-weight: 700; font-size: 0.95rem; color: var(--dark);
+      transition: background 0.2s;
+    }
+    .faq-question:hover { background: var(--pink-light); }
+    .faq-arrow { color: var(--pink); font-size: 1.1rem; transition: transform 0.3s; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s ease;
+      font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding: 0 24px 20px; }
+
+    /* CTA */
+    .care-cta {
+      background: var(--pink);
+      padding: 60px 80px;
+      text-align: center;
+    }
+    .care-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: #fff; margin-bottom: 14px;
+    }
+    .care-cta p { color: rgba(255,255,255,0.85); font-size: 1rem; margin-bottom: 28px; }
+    .care-cta .btn {
+      background: #fff; color: var(--pink); border-color: #fff;
+    }
+    .care-cta .btn:hover { background: var(--dark); border-color: var(--dark); color: #fff; }
+
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 50px 24px; }
+      .page-hero-content h1 { font-size: 2.2rem; }
+      .care-section, .faq-section { padding: 50px 20px; }
+      .care-cta { padding: 50px 24px; }
+      .tips-strip { padding: 16px 24px; justify-content: flex-start; }
+      .paw-decor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html">Available Pets</a></li>
+      <li><a href="post-a-pet.html">Post a Pet</a></li>
+      <li><a href="pet-care.html" class="active">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <h1>Pet <span class="brand-name">Care</span> Guide</h1>
+      <p>Everything you need to know to keep your furry friend happy, healthy, and thriving — from feeding to first vet visits.</p>
+    </div>
+    <div class="paw-decor">🐾</div>
+  </section>
+
+  <!-- QUICK TIPS STRIP -->
+  <div class="tips-strip">
+    <div class="tip-pill"><span><img src="Images/injection.svg" alt="icon"></span> Vaccinate Regularly</div>
+    <div class="tip-pill"><span><img src="Images/diet.svg" alt="icon"></span> Balanced Diet</div>
+    <div class="tip-pill"><span><img src="Images/grooming.svg" alt="icon"></span> Regular Grooming</div>
+    <div class="tip-pill"><span><img src="Images/exercise.svg" alt="icon"></span> Daily Exercise</div>
+    <div class="tip-pill"><span><img src="Images/blackHeart.svg" alt="icon"></span> Give Lots of Love</div>
+  </div>
+
+  <!-- CARE CARDS -->
+  <section class="care-section">
+    <h2>Dog <span class="brand-name">Care</span></h2>
+    <p class="section-subtitle">Essential tips to keep your canine companion healthy and happy</p>
+
+    <div class="care-grid">
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/nutrition.svg" alt="icon"></div>
+          <div>
+            <h3>Nutrition & Feeding</h3>
+            <p>Healthy diet for a happy dog</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Feed age-appropriate food (puppy, adult, senior)</li>
+            <li>Provide fresh water at all times</li>
+            <li>Avoid chocolate, grapes, onions & xylitol</li>
+            <li>Divide meals into 2–3 servings per day</li>
+            <li>Consult a vet before giving supplements</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/health.svg" alt="icon"></div>
+          <div>
+            <h3>Health & Vet Visits</h3>
+            <p>Keep your pup in top shape</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Schedule annual wellness check-ups</li>
+            <li>Keep vaccinations up to date</li>
+            <li>Use monthly flea and tick prevention</li>
+            <li>Deworm every 3–6 months</li>
+            <li>Watch for changes in eating or behaviour</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/grooming.svg" alt="icon"></div>
+          <div>
+            <h3>Grooming</h3>
+            <p>Looking great, feeling great</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Brush coat 2–3 times a week (daily for long hair)</li>
+            <li>Bathe every 4–6 weeks or as needed</li>
+            <li>Trim nails every 2–4 weeks</li>
+            <li>Clean ears weekly to avoid infection</li>
+            <li>Brush teeth several times per week</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/exercise.svg" alt="icon"></div>
+          <div>
+            <h3>Exercise & Play</h3>
+            <p>An active dog is a happy dog</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Aim for at least 30–60 minutes of exercise daily</li>
+            <li>Vary activities: fetch, walks, swimming</li>
+            <li>Provide mental stimulation with puzzle toys</li>
+            <li>Socialise with other dogs regularly</li>
+            <li>Avoid overexercising puppies under 1 year</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CAT CARE -->
+    <div class="care-divider">
+      <h2>Cat <span class="brand-name">Care</span></h2>
+      <p class="section-subtitle">Keep your feline friend purring with these expert tips</p>
+    </div>
+
+    <div class="care-grid">
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/nutrition.svg" alt="icon"></div>
+          <div>
+            <h3>Nutrition & Feeding</h3>
+            <p>Cats are obligate carnivores</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Feed high-protein, meat-based diet</li>
+            <li>Always provide fresh, clean water</li>
+            <li>Avoid onions, garlic, milk & raw fish</li>
+            <li>Feed 2–3 small meals per day</li>
+            <li>Transition new foods gradually over 7–10 days</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/health.svg" alt="icon"></div>
+          <div>
+            <h3>Health & Vet Visits</h3>
+            <p>Prevention is better than cure</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Annual vet check-ups are essential</li>
+            <li>Core vaccines include rabies and FVRCP</li>
+            <li>Spay or neuter by 6 months of age</li>
+            <li>Check for dental disease yearly</li>
+            <li>Monthly flea and parasite prevention</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+          <div class="care-icon"><img src="Images/environment.svg" alt="icon"></div>
+          <div>
+            <h3>Environment & Enrichment</h3>
+            <p>A stimulating space = a happy cat</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Provide a clean litter box (1 per cat + 1 extra)</li>
+            <li>Offer cat trees, perches and window views</li>
+            <li>Interactive toys combat boredom</li>
+            <li>Scratching posts protect your furniture</li>
+            <li>Keep safe hiding spots available</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="care-card">
+        <div class="care-card-header">
+        <div class="care-icon"><img src="Images/grooming.svg" alt="icon"></div>
+
+          <div>
+            <h3>Grooming & Hygiene</h3>
+            <p>Cats groom but still need your help</p>
+          </div>
+        </div>
+        <div class="care-card-body">
+          <ul class="care-list">
+            <li>Brush short-haired cats weekly; long-haired daily</li>
+            <li>Check and clean ears gently each week</li>
+            <li>Trim nails every 2–3 weeks</li>
+            <li>Brush teeth regularly to prevent tartar</li>
+            <li>Bathe only when absolutely necessary</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <h2>Frequently Asked <span class="brand-name">Questions</span></h2>
+    <div class="faq-grid">
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          How soon should I take a new pet to the vet?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+          Within the first week of bringing your pet home. A vet will assess their health, confirm or start vaccinations, check for parasites, and give you a personalised care plan.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          What vaccinations does my pet need?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+          Dogs need Rabies, Distemper, Parvovirus, and Hepatitis (core vaccines). Cats need Rabies and FVRCP (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia). Your vet will recommend a schedule based on age and lifestyle.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          How do I introduce a new pet to my home?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+          Start by giving them a quiet, small space to adjust. Gradually introduce them to other areas and family members. If you have other pets, do slow, supervised introductions over several days to reduce stress and territorial behaviour.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Is it necessary to neuter/spay my pet?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+          Highly recommended. Spaying and neutering prevents unwanted litters, reduces the risk of certain cancers and infections, and can improve behaviour. Most vets recommend doing this around 6 months of age.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          What should I do in a pet emergency?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+          Stay calm and contact your nearest emergency vet immediately. Keep the vet's emergency number saved in your phone. In Karachi, several 24-hour veterinary clinics are available. Do not attempt home treatment for serious injuries or illness.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="care-cta">
+    <h2>Ready to Give a Pet a Home?</h2>
+    <p>Browse our available pets and find your perfect companion today.</p>
+    <a href="available-pets.html" class="btn">Browse Available Pets</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script>
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      item.classList.toggle('open');
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

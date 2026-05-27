@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Available Pets – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 60%, #fce4ec 100%);
+      padding: 70px 80px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(232,71,106,0.07) 0%, transparent 70%);
+      top: -80px; right: 100px;
+      pointer-events: none;
+    }
+    .page-hero-content { z-index: 1; animation: fadeInUp 0.7s ease both; }
+    .page-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .page-hero-content p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+    }
+    .paw-decor {
+      font-size: 8rem;
+      opacity: 0.08;
+      position: absolute;
+      right: 80px;
+      bottom: -10px;
+      z-index: 0;
+      user-select: none;
+    }
+
+    /* ── TABS ── */
+    .pets-section { padding: 60px 80px; background: var(--white); }
+    .tab-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .tab-btn {
+      padding: 10px 28px;
+      border-radius: 50px;
+      border: 2px solid #e0e0e0;
+      background: transparent;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.25s ease;
+    }
+    .tab-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .tab-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+
+    /* ── PETS GRID ── */
+    .ap-pets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
+    }
+    .ap-pet-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(232,71,106,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .ap-pet-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(232,71,106,0.18);
+    }
+
+    /* badge */
+    .ap-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--pink);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 50px;
+      z-index: 2;
+      font-family: 'Nunito', sans-serif;
+    }
+    .ap-badge.cat-badge { background: #9c27b0; }
+
+    /* image */
+    .ap-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 210px;
+      overflow: hidden;
+    }
+    .ap-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .ap-pet-card:hover .ap-img-wrap img { transform: scale(1.06); }
+    .ap-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(232,71,106,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .ap-pet-card:hover .ap-overlay { opacity: 1; }
+
+    /* info */
+    .ap-info { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .ap-name-row { display: flex; align-items: center; justify-content: space-between; }
+    .ap-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--dark); }
+    .ap-gender { font-size: 0.8rem; font-weight: 700; padding: 3px 10px; border-radius: 50px; }
+    .ap-gender.male { background: #e3f2fd; color: #1976d2; }
+    .ap-gender.female { background: #fce4ec; color: var(--pink); }
+    .ap-meta { display: flex; gap: 14px; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+    .ap-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    .ap-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .tag {
+      background: var(--pink-light);
+      color: var(--pink);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    /* CTA */
+    .ap-cta {
+      text-align: center;
+      margin-top: 60px;
+      padding: 40px;
+      background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 100%);
+      border-radius: var(--radius);
+    }
+    .ap-cta p { color: var(--text); font-size: 1.05rem; margin-bottom: 18px; }
+
+    /* nav active */
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 50px 24px; }
+      .page-hero-content h1 { font-size: 2.2rem; }
+      .pets-section { padding: 40px 20px; }
+      .ap-pets-grid { grid-template-columns: 1fr; }
+      .paw-decor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html" class="active">Available Pets</a></li>
+      <li><a href="post-a-pet.html">Post a Pet</a></li>
+      <li><a href="pet-care.html">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <h1>Available <span class="brand-name">Pets</span></h1>
+      <p>Meet our wonderful animals waiting for their forever home. Each one has so much love to give!</p>
+    </div>
+    <div class="paw-decor">🐾</div>
+  </section>
+
+  <!-- TABS + GRID -->
+  <section class="pets-section">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="filterPets('all', this)">All Pets</button>
+      <button class="tab-btn" onclick="filterPets('dog', this)"> Dogs</button>
+      <button class="tab-btn" onclick="filterPets('cat', this)"> Cats</button>
+    </div>
+
+    <div class="ap-pets-grid" id="petsGrid">
+
+      <!-- DOGS -->
+      <div class="ap-pet-card" data-type="dog" style="position:relative;">
+        <div class="ap-badge">Dog</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Max.jpeg" alt="Max"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Max</span>
+            <span class="ap-gender male">♂ Male</span>
+          </div>
+          <div class="ap-meta"><span>🎂 1.5 Years</span><span>📍 Karachi</span></div>
+          <p class="ap-desc">A playful and energetic Golden Retriever who loves fetch, belly rubs, and long walks in the park.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Friendly</span><span class="tag">Good with Kids</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="dog" style="position:relative;">
+        <div class="ap-badge">Dog</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Bruno.avif" alt="Bruno"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Bruno</span>
+            <span class="ap-gender male">♂ Male</span>
+          </div>
+          <div class="ap-meta"><span>🎂 3 Years</span><span>📍 Lahore</span></div>
+          <p class="ap-desc">Bruno is a calm and gentle Labrador who enjoys cozy evenings and is great with other pets.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Calm</span><span class="tag">House Trained</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="dog" style="position:relative;">
+        <div class="ap-badge">Dog</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Daisy.avif" alt="Daisy"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Daisy</span>
+            <span class="ap-gender female">♀ Female</span>
+          </div>
+          <div class="ap-meta"><span>🎂 2 Years</span><span>📍 Islamabad</span></div>
+          <p class="ap-desc">Daisy is a sweet Beagle mix who loves to cuddle and play. She's fully trained and ready for her forever family.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Playful</span><span class="tag">Good with Cats</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="dog" style="position:relative;">
+        <div class="ap-badge">Dog</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Rocky.avif" alt="Rocky"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Rocky</span>
+            <span class="ap-gender male">♂ Male</span>
+          </div>
+          <div class="ap-meta"><span>🎂 4 Years</span><span>📍 Karachi</span></div>
+          <p class="ap-desc">Rocky is an adventurous pup who loves hiking and outdoor activities. He's loyal and very affectionate.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Active</span><span class="tag">Loyal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATS -->
+      <div class="ap-pet-card" data-type="cat" style="position:relative;">
+        <div class="ap-badge cat-badge">Cat</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Mittens.jpeg" alt="Mittens"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Mittens</span>
+            <span class="ap-gender female">♀ Female</span>
+          </div>
+          <div class="ap-meta"><span>🎂 1 Year</span><span>📍 Karachi</span></div>
+          <p class="ap-desc">Mittens is a fluffy and affectionate Persian cat who loves being held and purrs like a little engine.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Indoor</span><span class="tag">Lap Cat</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="cat" style="position:relative;">
+        <div class="ap-badge cat-badge">Cat</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Simba.avif" alt="Simba"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Simba</span>
+            <span class="ap-gender male">♂ Male</span>
+          </div>
+          <div class="ap-meta"><span>🎂 3 Years</span><span>📍 Lahore</span></div>
+          <p class="ap-desc">Simba is a majestic orange tabby with a bold personality. He enjoys sunbathing and chasing toys all day.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Playful</span><span class="tag">Independent</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="cat" style="position:relative;">
+        <div class="ap-badge cat-badge">Cat</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Luna.avif" alt="Luna"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Luna</span>
+            <span class="ap-gender female">♀ Female</span>
+          </div>
+          <div class="ap-meta"><span>🎂 2 Years</span><span>📍 Karachi</span></div>
+          <p class="ap-desc">Luna is a graceful white cat with bright blue eyes. She's gentle, quiet, and loves peaceful households.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Quiet</span><span class="tag">Gentle</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-pet-card" data-type="cat" style="position:relative;">
+        <div class="ap-badge cat-badge">Cat</div>
+        <div class="ap-img-wrap">
+          <img src="Images/Cleo.avif" alt="Cleo"/>
+          <div class="ap-overlay"><a href="#" class="btn btn-pink">Adopt Me</a></div>
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <span class="ap-name">Cleo</span>
+            <span class="ap-gender female">♀ Female</span>
+          </div>
+          <div class="ap-meta"><span>🎂 1.5 Years</span><span>📍 Islamabad</span></div>
+          <p class="ap-desc">Cleo is a curious and mischievous tuxedo cat who will keep you entertained with her clever antics all day.</p>
+          <div class="ap-tags">
+            <span class="tag">Vaccinated</span><span class="tag">Curious</span><span class="tag">Energetic</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="ap-cta">
+      <p>Don't see the right match? <strong>New pets arrive every week!</strong></p>
+      <a href="contact.html" class="btn btn-pink">Contact Us to Learn More</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script>
+    function filterPets(type, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.ap-pet-card').forEach(card => {
+        if (type === 'all' || card.dataset.type === type) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

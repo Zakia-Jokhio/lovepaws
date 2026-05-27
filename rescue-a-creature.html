@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rescue a Creature – LovePaws</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 60%, #fce4ec 100%);
+      padding: 70px 80px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .page-hero-content { z-index: 1; animation: fadeInUp 0.7s ease both; max-width: 560px; }
+    .page-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; color: var(--dark); margin-bottom: 14px;
+    }
+    .page-hero-content p { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .paw-decor {
+      font-size: 8rem; opacity: 0.08;
+      position: absolute; right: 80px; bottom: -10px; user-select: none;
+    }
+
+    /* ── HOW IT WORKS STRIP ── */
+    .how-strip {
+      background: var(--pink);
+      padding: 32px 80px;
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;
+    }
+    .how-step {
+      display: flex; align-items: center; gap: 14px; color: #fff;
+    }
+    .how-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; flex-shrink: 0;
+    }
+    .how-text strong { display: block; font-size: 0.92rem; }
+    .how-text span { font-size: 0.78rem; opacity: 0.85; }
+
+    /* ── MAIN BODY ── */
+    .rescue-body {
+      padding: 70px 80px;
+      background: var(--white);
+      display: flex; gap: 60px; align-items: flex-start;
+    }
+
+    /* ── FORM SIDE ── */
+    .rescue-form-col { flex: 1; }
+    .rescue-form-col h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .rescue-form-col > p { color: var(--muted); font-size: 0.93rem; margin-bottom: 32px; }
+
+    .rescue-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 16px;
+      border: 1.5px solid #e0e0e0; border-radius: 12px;
+      font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+      color: var(--text); outline: none;
+      transition: border-color 0.2s; background: var(--bg);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--pink); background: #fff; }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    /* urgency radios */
+    .urgency-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .urgency-label {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      border: 2px solid #e0e0e0; border-radius: 50px;
+      cursor: pointer; font-size: 0.87rem; font-weight: 700;
+      transition: all 0.2s; color: var(--text);
+    }
+    .urgency-label input[type="radio"] { accent-color: var(--pink); }
+    .urgency-label:hover { border-color: var(--pink); color: var(--pink); }
+    .urgency-label input:checked ~ span { color: var(--pink); }
+    .urgency-label:has(input:checked) { border-color: var(--pink); background: var(--pink-light); color: var(--pink); }
+
+    /* upload */
+    .upload-area {
+      border: 2px dashed #e0c5cc; border-radius: 16px;
+      padding: 26px; text-align: center; cursor: pointer;
+      transition: border-color 0.25s, background 0.25s; background: var(--bg);
+    }
+    .upload-area:hover { border-color: var(--pink); background: var(--pink-light); }
+    .upload-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .upload-area p { color: var(--muted); font-size: 0.85rem; }
+    .upload-area span { color: var(--pink); font-weight: 700; }
+    .upload-area input[type="file"] { display: none; }
+    .photo-preview-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .preview-thumb { width: 76px; height: 76px; border-radius: 10px; object-fit: cover; border: 2px solid var(--pink-light); }
+
+    /* success */
+    .success-msg {
+      display: none;
+      background: #e8f5e9; border: 1.5px solid #4caf50;
+      border-radius: 12px; padding: 18px 22px;
+      color: #2e7d32; font-weight: 700; font-size: 0.95rem;
+      margin-bottom: 20px; animation: fadeInUp 0.4s ease;
+    }
+    .form-submit .btn { font-size: 1rem; padding: 13px 36px; }
+
+    /* ── INFO SIDE ── */
+    .rescue-info-col {
+      width: 300px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 20px;
+      position: sticky; top: 100px;
+    }
+    .info-card {
+      background: linear-gradient(135deg, #fff0f3 0%, #fce4ec 100%);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .info-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; color: var(--dark); margin-bottom: 14px;
+    }
+    .info-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .info-card ul li {
+      font-size: 0.88rem; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .info-card ul li::before { content: '✓'; color: var(--pink); font-weight: 700; flex-shrink: 0; }
+
+    .emergency-card {
+      background: var(--pink); border-radius: var(--radius); padding: 24px; color: #fff;
+    }
+    .emergency-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 14px; }
+    .emergency-card p { font-size: 0.87rem; opacity: 0.9; line-height: 1.6; margin-bottom: 10px; }
+    .emergency-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; letter-spacing: 1px;
+      background: rgba(255,255,255,0.2); border-radius: 10px;
+      padding: 10px 16px; margin-bottom: 10px; display: block;
+      text-align: center;
+    }
+    .emergency-card a.btn {
+      background: #fff; color: var(--pink);
+      display: inline-block; margin-top: 6px; font-size: 0.85rem;
+    }
+
+    /* ── RECENT RESCUES ── */
+    .recent-section {
+      background: linear-gradient(135deg, #fff0f3 0%, #fff8f9 100%);
+      padding: 70px 80px;
+    }
+    .recent-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem; color: var(--dark);
+      text-align: center; margin-bottom: 8px;
+    }
+    .rescue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .rescue-card {
+      background: #fff; border-radius: var(--radius); overflow: hidden;
+      box-shadow: 0 4px 20px rgba(232,71,106,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .rescue-card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(232,71,106,0.16); }
+    .rescue-card-img { width: 100%; height: 180px; object-fit: cover; }
+    .rescue-card-body { padding: 18px 18px 22px; }
+    .rescue-status {
+      display: inline-block;
+      padding: 3px 12px; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 700; margin-bottom: 10px;
+    }
+    .status-safe { background: #e8f5e9; color: #2e7d32; }
+    .status-care { background: #fff3e0; color: #e65100; }
+    .status-adopted { background: var(--pink-light); color: var(--pink); }
+    .rescue-card-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .rescue-card-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .rescue-location { font-size: 0.78rem; color: var(--pink); font-weight: 700; margin-top: 8px; }
+
+    /* ── CTA ── */
+    .rescue-cta {
+      background: var(--pink); padding: 60px 80px; text-align: center;
+    }
+    .rescue-cta h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 14px; }
+    .rescue-cta p { color: rgba(255,255,255,0.85); font-size: 1rem; margin-bottom: 28px; }
+    .rescue-cta .btn { background: #fff; color: var(--pink); border-color: #fff; margin: 6px; }
+    .rescue-cta .btn:hover { background: var(--dark); border-color: var(--dark); color: #fff; }
+
+    .nav-links a.active { color: var(--pink); }
+
+    @media (max-width: 1024px) {
+      .rescue-body { flex-direction: column; padding: 50px 40px; }
+      .rescue-info-col { width: 100%; position: static; flex-direction: row; flex-wrap: wrap; }
+      .info-card, .emergency-card { flex: 1; min-width: 240px; }
+    }
+    @media (max-width: 768px) {
+      .page-hero { padding: 50px 24px; }
+      .page-hero-content h1 { font-size: 2.2rem; }
+      .how-strip { padding: 24px 24px; }
+      .rescue-body { padding: 40px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .recent-section, .rescue-cta { padding: 50px 20px; }
+      .paw-decor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="Images/logo.svg" alt="LovePaws Logo" class="logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="available-pets.html">Available Pets</a></li>
+      <li><a href="post-a-pet.html">Post a Pet</a></li>
+      <li><a href="pet-care.html">Pet Care</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search puppies, kittens..." class="search-input"/>
+      <a href="rescue.html" class="btn btn-pink active-btn">Rescue a Creature</a>
+      <a href="donate.html" class="btn btn-pink">Donate</a>
+      <a href="login.html" class="btn btn-pink">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <h1>Rescue a <span class="brand-name">Creature</span></h1>
+      <p>Spotted a stray or injured animal? Don't look away — report it to us and our rescue team will respond within hours. Every animal deserves safety, care, and love.</p>
+    </div>
+    <div class="paw-decor">🆘</div>
+  </section>
+
+  <!-- HOW IT WORKS STRIP -->
+  <div class="how-strip">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-text"><strong>Submit Report</strong><span>Fill in the form below</span></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-text"><strong>Team Notified</strong><span>Within minutes of your report</span></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-text"><strong>Rescue Dispatched</strong><span>Team heads to the location</span></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-text"><strong>Animal Cared For</strong><span>Medical attention & shelter</span></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">5</div>
+      <div class="how-num" style="width:auto; background:none; font-size:0.78rem; opacity:0.9;">→ Listed for Adoption</div>
+    </div>
+  </div>
+
+  <!-- MAIN BODY -->
+  <section class="rescue-body">
+
+    <!-- FORM COLUMN -->
+    <div class="rescue-form-col">
+      <h2>Report a <span class="brand-name">Stray Animal</span></h2>
+      <p>Please provide as much detail as possible so our rescue team can locate and help the animal quickly.</p>
+
+      <div class="success-msg" id="successMsg">
+         Thank you! Your rescue report has been submitted. Our team will contact you within 1–2 hours. You may have just saved a life!
+      </div>
+
+      <form class="rescue-form" onsubmit="handleRescueSubmit(event)">
+
+        <!-- Reporter Info -->
+        <h3 style="font-family:'Playfair Display',serif; color:var(--dark); font-size:1.15rem;">Your Details</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reporterName">Your Name *</label>
+            <input type="text" id="reporterName" placeholder="Full name" required />
+          </div>
+          <div class="form-group">
+            <label for="reporterPhone">Phone Number *</label>
+            <input type="tel" id="reporterPhone" placeholder="03XX-XXXXXXX" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reporterEmail">Email Address</label>
+          <input type="email" id="reporterEmail" placeholder="yourname@email.com (for updates)" />
+        </div>
+
+        <!-- Animal Info -->
+        <h3 style="font-family:'Playfair Display',serif; color:var(--dark); font-size:1.15rem; margin-top: 8px;">Animal Details</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="animalType">Animal Type *</label>
+            <select id="animalType" required>
+              <option value="" disabled selected>Select type</option>
+              <option>Dog</option>
+              <option>Cat</option>
+              <option>Bird</option>
+              <option>Rabbit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="animalCount">Number of Animals *</label>
+            <select id="animalCount" required>
+              <option value="" disabled selected>Select</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Urgency Level *</label>
+          <div class="urgency-group">
+            <label class="urgency-label">
+              <input type="radio" name="urgency" value="critical" required />
+              <span>🔴 Critical – Injured / in danger</span>
+            </label>
+            <label class="urgency-label">
+              <input type="radio" name="urgency" value="moderate" />
+              <span>🟡 Moderate – Stray, needs help</span>
+            </label>
+            <label class="urgency-label">
+              <input type="radio" name="urgency" value="low" />
+              <span>🟢 Low – Safe but needs rescue</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <h3 style="font-family:'Playfair Display',serif; color:var(--dark); font-size:1.15rem; margin-top: 8px;">Location</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <select id="city" required>
+              <option value="" disabled selected>Select city</option>
+              <option>Karachi</option>
+              <option>Lahore</option>
+              <option>Islamabad</option>
+              <option>Rawalpindi</option>
+              <option>Peshawar</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="area">Area / Neighbourhood *</label>
+            <input type="text" id="area" placeholder="e.g. Block 5, Clifton" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="landmark">Nearby Landmark</label>
+          <input type="text" id="landmark" placeholder="e.g. Near KFC, outside ABC School..." />
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="animalDesc">Describe the Animal & Situation *</label>
+          <textarea id="animalDesc" placeholder="Colour, size, visible injuries, behaviour, how long it's been there..." required></textarea>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="form-group">
+          <label>Upload a Photo (optional but very helpful)</label>
+          <div class="upload-area" onclick="document.getElementById('rescuePhoto').click()">
+            <div class="upload-icon">📷</div>
+            <p><span>Click to upload</span> a photo of the animal</p>
+            <p style="font-size:0.78rem; margin-top:4px;">JPG or PNG, up to 5MB</p>
+            <input type="file" id="rescuePhoto" accept="image/*" multiple />
+          </div>
+          <div class="photo-preview-grid" id="rescuePhotoPreview"></div>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-pink">🆘 Submit Rescue Report</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- INFO COLUMN -->
+    <aside class="rescue-info-col">
+
+      <div class="emergency-card">
+        <h3>☎️ Emergency Hotline</h3>
+        <p>If the animal is in immediate danger, call us directly — don't wait for the form.</p>
+        <span class="emergency-number">+92 300 1234567</span>
+        <p style="font-size:0.8rem; opacity:0.85;">Available 8 AM – 10 PM daily</p>
+        <a href="contact.html" class="btn">Send us a Message</a>
+      </div>
+
+      <div class="info-card">
+        <h3>What Happens Next?</h3>
+        <ul>
+          <li>Our team reviews your report within 30 minutes</li>
+          <li>A rescue volunteer is dispatched to the location</li>
+          <li>Animal receives immediate first aid if needed</li>
+          <li>Moved to a safe shelter for recovery</li>
+          <li>Health checked and vaccinated by our vet</li>
+          <li>Listed for adoption once ready</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>Tips While You Wait</h3>
+        <ul>
+          <li>Do not corner or chase an injured animal</li>
+          <li>Offer water from a distance if safe to do so</li>
+          <li>Keep other people and pets away</li>
+          <li>Stay nearby if possible so you can guide the team</li>
+          <li>Take a photo to help the team identify the animal</li>
+        </ul>
+      </div>
+
+    </aside>
+
+  </section>
+
+  <!-- RECENTLY RESCUED SECTION -->
+  <section class="recent-section">
+    <h2>Recently <span class="brand-name">Rescued</span></h2>
+    <p class="section-subtitle">Animals that were saved thanks to reports just like yours</p>
+
+    <div class="rescue-grid">
+
+      <div class="rescue-card">
+        <img src="Images/Daisy.avif" alt="Rescued Dog" class="rescue-card-img" />
+        <div class="rescue-card-body">
+          <span class="rescue-status status-adopted">✅ Adopted</span>
+          <h4>Daisy — Beagle Mix</h4>
+          <p>Found injured near a highway in Islamabad. Nursed back to health in 3 weeks and found a forever family.</p>
+          <div class="rescue-location">📍 Islamabad · Rescued Feb 2026</div>
+        </div>
+      </div>
+
+      <div class="rescue-card">
+        <img src="Images/Luna.avif" alt="Rescued Cat" class="rescue-card-img" />
+        <div class="rescue-card-body">
+          <span class="rescue-status status-adopted">✅ Adopted</span>
+          <h4>Luna — White Cat</h4>
+          <p>Reported by a shopkeeper in Karachi. She was malnourished but recovered beautifully after two weeks of care.</p>
+          <div class="rescue-location">📍 Karachi · Rescued Jan 2026</div>
+        </div>
+      </div>
+
+      <div class="rescue-card">
+        <img src="Images/Bruno.avif" alt="Rescued Dog" class="rescue-card-img" />
+        <div class="rescue-card-body">
+          <span class="rescue-status status-care">🏥 In Care</span>
+          <h4>Bruno — Labrador</h4>
+          <p>Brought in from Lahore with a leg injury. Currently recovering with our partner vet and doing very well!</p>
+          <div class="rescue-location">📍 Lahore · Rescued Apr 2026</div>
+        </div>
+      </div>
+
+      <div class="rescue-card">
+        <img src="Images/Cleo.avif" alt="Rescued Cat" class="rescue-card-img" />
+        <div class="rescue-card-body">
+          <span class="rescue-status status-safe">🏠 Safe</span>
+          <h4>Cleo — Tuxedo Cat</h4>
+          <p>Spotted in a drainage pipe during rains in Islamabad. Safely rescued and currently being fostered.</p>
+          <div class="rescue-location">📍 Islamabad · Rescued Mar 2026</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="rescue-cta">
+    <h2>Want to Do More?</h2>
+    <p>Become a volunteer or donate to support our rescue operations across Pakistan.</p>
+    <a href="donate.html" class="btn">Donate to LovePaws</a>
+    <a href="contact.html" class="btn">Volunteer With Us</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 LovePaws. Made with ❤️ for every paw.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function handleRescueSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      e.target.reset();
+      document.getElementById('rescuePhotoPreview').innerHTML = '';
+      window.scrollTo({ top: msg.offsetTop - 120, behavior: 'smooth' });
+    }
+
+    // Photo preview
+    document.getElementById('rescuePhoto').addEventListener('change', function () {
+      const preview = document.getElementById('rescuePhotoPreview');
+      preview.innerHTML = '';
+      Array.from(this.files).slice(0, 5).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'preview-thumb';
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // Upload area drag & drop
+    const ua = document.querySelector('.upload-area');
+    ua.addEventListener('dragover', e => { e.preventDefault(); ua.style.borderColor = 'var(--pink)'; });
+    ua.addEventListener('dragleave', () => { ua.style.borderColor = ''; });
+    ua.addEventListener('drop', e => { e.preventDefault(); ua.style.borderColor = ''; });
+  </script>
+
+</body>
+</html>
